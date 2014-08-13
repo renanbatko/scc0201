@@ -2,57 +2,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//função para calcular o fatorial
-int fatorial(int n){
-	if (n == 0 || n == 1)
-		return 1;
-		
-	int fat = 1, i;
-	for (i = n; i > 1; i--)
-		fat = fat * i;
-	return fat;
-}
-
-//função para calcular o coeficiente binomial
-int coeficiente_binomial(int n, int k){	
-	return fatorial(n)/(fatorial(k) * fatorial(n-k));
-}
-
-//função que calcula os valores de cada posição do triângulo
-void calcula_triangulo(int n, int *vector){
-	int i = 0, l, c;
+void completa_matriz(int **m, int n){
+	int l, c;
 	for (l = 0; l < n; l++){
 		for (c = 0; c <= l; c++){
-			vector[i] = coeficiente_binomial(l, c);
-			i++;
+			if (c == 0 || l == c){
+				m[l][c] = 1;
+			}
+			else{
+				m[l][c] = m[l-1][c-1] + m[l-1][c];
+			}
 		}
 	}
 }
 
-//função para imprimir os elementos do triângulo
-void print_triangulo(int *vector, int vector_size){
-	int i;
-	for (i = 0; i < vector_size; i++)
-		printf("%d\n", vector[i]);
+void imprime_matriz(int **m, int n){
+	int i, j;
+	for (i = 0; i < n; i++){
+		for (j = 0; j <= i; j++){
+			printf("%d\n", m[i][j]);
+		}
+	}
 }
 
-int main(int argc, char *argv[]){
-	int n;
+int main(void){
+	int n, i;
 	scanf(" %d", &n);
 	
-	int vector_size = 0;
-	int i;
+	int **m = (int **) malloc((n+1)*sizeof(int *));
+	for (i = 0; i < n; i++){
+		m[i] = (int *) malloc((i+1)*sizeof(int));
+	}
 	
-	//cálculo do número de elementos que o triângulo de pascal terá
-	for (i = n; i > 0; i--)
-		vector_size = vector_size + i;
+	completa_matriz(m, n);
+	imprime_matriz(m, n);
 	
-	//vetor para armazenar os valores do triângulo de pascal
-	int *vector = (int *) malloc((vector_size + 1) * sizeof(int));
-	
-	calcula_triangulo(n, vector);
-	print_triangulo(vector, vector_size);
-		
-	free(vector);
 	return 0;
 }

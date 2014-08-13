@@ -1,18 +1,41 @@
+//renan santos batko - nusp 8532172
 #include <stdio.h>
 #include <stdlib.h>
 
-int fatorial(int n){
+//função para calcular o fatorial
+int fatorial(unsigned long int n){
 	if (n == 0 || n == 1)
 		return 1;
 		
-	int fat = 1, i;
+	unsigned long int fat = 1;
+	int i;
 	for (i = n; i > 1; i--)
 		fat = fat * i;
 	return fat;
 }
 
-int coeficiente_binomial(int n, int k){	
+//função para calcular o coeficiente binomial
+int coeficiente_binomial(unsigned long int n, unsigned long int k){	
 	return fatorial(n)/(fatorial(k) * fatorial(n-k));
+}
+
+//função que calcula os valores de cada posição do triângulo
+void calcula_triangulo(int n, unsigned long int *vector){
+	unsigned long int l, c;
+	int i = 0;
+	for (l = 0; l < n; l++){
+		for (c = 0; c <= l; c++){
+			vector[i] = coeficiente_binomial(l, c);
+			i++;
+		}
+	}
+}
+
+//função para imprimir os elementos do triângulo
+void print_triangulo(unsigned long int *vector, int vector_size){
+	int i;
+	for (i = 0; i < vector_size; i++)
+		printf("%lu\n", vector[i]);
 }
 
 int main(int argc, char *argv[]){
@@ -22,22 +45,15 @@ int main(int argc, char *argv[]){
 	int vector_size = 0;
 	int i;
 	
+	//cálculo do número de elementos que o triângulo de pascal terá
 	for (i = n; i > 0; i--)
 		vector_size = vector_size + i;
 	
-	int *vector = (int *) malloc((vector_size + 1) * sizeof(int));
-	int l = 0, c = 0;
+	//vetor para armazenar os valores do triângulo de pascal
+	unsigned long int *vector = (unsigned long int *) malloc((vector_size + 1) * sizeof(unsigned long int));
 	
-	i = 0;
-	for (l = 0; l < n; l++){
-		for (c = 0; c <= l; c++){
-			vector[i] = coeficiente_binomial(l, c);
-			i++;
-		}
-	}
-	
-	for (i = 0; i < vector_size; i++)
-		printf("%d\n", vector[i]);
+	calcula_triangulo(n, vector);
+	print_triangulo(vector, vector_size);
 		
 	free(vector);
 	return 0;
