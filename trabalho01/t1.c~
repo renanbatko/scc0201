@@ -20,7 +20,7 @@ void imprime_matriz(unsigned long int **m, int n){
 	unsigned long int i, j;
 	for (i = 0; i < n; i++){
 		for (j = 0; j <= i; j++){
-			printf("%u\n", m[i][j]);
+			printf("%lu\n", m[i][j]);
 		}
 	}
 }

@@ -37,5 +37,7 @@ int main(void){
 	completa_matriz(m, n);
 	imprime_matriz(m, n);
 	
+	free(m);
+	
 	return 0;
 }
