@@ -54,6 +54,7 @@ int main(void){
 		vet[k] = v[i+1];
 		gera_eq(v[i], &a, &b, &c, &d);
 		printf("a = %lf b = %lf c = %lf d = %lf\n", a, b, c, d);
+		
 	}
 	
 	imprime_mat(mat, n);

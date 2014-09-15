@@ -59,6 +59,7 @@ int main(void){
 	
 	imprime_mat(mat, n);
 	free(v);
+	free(vet);
 	free(mat);	
 	
 	return 0;
