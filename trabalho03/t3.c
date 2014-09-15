@@ -2,15 +2,19 @@
 #include <stdio.h>
 #include <math.h>
 
-void imprime_mat(double **mat, int n){
+void imprime_mat(double **mat, double *vet, int n){
 	int i, j;
 	for (i = 0; i < n; i++){
 		for (j = 0; j < 3; j++){
-			mat[i][j] = 5;
 			printf("%lf ", mat[i][j]);
 		}
 		printf("\n");
 	}
+	
+	printf("\n");
+	
+	for (i = 0; i < n; i++)
+		printf("%lf ", vet[i]);
 }
 
 void gera_eq(double x, double *a, double *b, double *c, double *d){
@@ -48,16 +52,21 @@ int main(void){
 	}
 	
 	//gerando os coeficientes
-	double a, b, c, d;
-	int k = 0;
+	double abcd[4];
+	int k = 0, j, jj = 0;
 	for (i = 0; i < 2*n; i = i + 2){
+		//if (i != 0)
 		vet[k] = v[i+1];
-		gera_eq(v[i], &a, &b, &c, &d);
-		printf("a = %lf b = %lf c = %lf d = %lf\n", a, b, c, d);
-		
+		gera_eq(v[i], &abcd[0], &abcd[1], &abcd[2], &abcd[3]);
+		printf("a = %lf b = %lf c = %lf d = %lf\n", abcd[0], abcd[1], abcd[2], abcd[3]);
+		for (j = 0; j < n; j++){
+			mat[jj][j] = abcd[j];
+		}
+		jj++;
+		k++;
 	}
 	
-	imprime_mat(mat, n);
+	imprime_mat(mat, vet, n);
 	free(v);
 	free(vet);
 	free(mat);	
