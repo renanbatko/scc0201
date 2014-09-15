@@ -5,7 +5,7 @@
 void imprime_mat(double **mat, int n){
 	int i, j;
 	for (i = 0; i < n; i++){
-		for (j = 0; j < 4; j++){
+		for (j = 0; j < 3; j++){
 			mat[i][j] = 5;
 			printf("%lf ", mat[i][j]);
 		}
@@ -13,38 +13,51 @@ void imprime_mat(double **mat, int n){
 	}
 }
 
-void gera_eq(double x, double y){
+void gera_eq(double x, double *a, double *b, double *c, double *d){
 	//y = ax^3 + bx^2 + cx + d
-	double a, b, c, d;
-	double eq;
-	eq = 
-	
+	*a = pow(x, 3);
+	*b = pow(x, 2);
+	*c = x;
+	*d = 1;
 }
 
 int main(void){
 	int n;
 	scanf(" %d", &n);
 	
-	double *vet;
-	vet = (double *) malloc(2*n*sizeof(double));
+	//alocacao do vetor com os valores de entrada
+	//P(x, y) = P(vet[i], vet[i+1])
+	double *v;
+	v = (double *) malloc(2 * n * sizeof(double));
 	
+	//alocacao do vetor resposta
+	double *vet;
+	vet = (double *) malloc(n * sizeof(double));
+	
+	//leitura dos valores de entrada
 	int i;
 	for (i = 0; i < 2*n; i++){
-		scanf(" %lf", &vet[i]);
+		scanf(" %lf", &v[i]);
 	}
 	
-	for (i = 0; i < 2*n; i = i + 2){
-		gera_eq(vet[i], vet[i+1]);
-	}
-	
+	//alocacao da matriz
 	double **mat;
-	mat = (double **) malloc(4*sizeof(double *));
+	mat = (double **) malloc(3 * sizeof(double *));
 	for (i = 0; i < n; i++){
-		mat[i] = (double *) malloc(n*sizeof(double));
+		mat[i] = (double *) malloc(n * sizeof(double));
+	}
+	
+	//gerando os coeficientes
+	double a, b, c, d;
+	int k = 0;
+	for (i = 0; i < 2*n; i = i + 2){
+		vet[k] = v[i+1];
+		gera_eq(v[i], &a, &b, &c, &d);
+		printf("a = %lf b = %lf c = %lf d = %lf\n", a, b, c, d);
 	}
 	
 	imprime_mat(mat, n);
-	free(vet);
+	free(v);
 	free(mat);	
 	
 	return 0;
