@@ -102,6 +102,7 @@ int main(void){
 	
 	//imprime(mat, vet, n);
 	free(v);
+	free(x);
 	free(vet);
 	free(mat);	
 	

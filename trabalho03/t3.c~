@@ -81,7 +81,7 @@ int main(void){
 		//if (i != 0)
 		vet[k] = v[i+1];
 		gera_eq(v[i], &abcd[0], &abcd[1], &abcd[2], &abcd[3]);
-		printf("a = %lf b = %lf c = %lf d = %lf\n", abcd[0], abcd[1], abcd[2], abcd[3]);
+		//printf("a = %lf b = %lf c = %lf d = %lf\n", abcd[0], abcd[1], abcd[2], abcd[3]);
 		for (j = 0; j < n; j++){
 			mat[jj][j] = abcd[j];
 		}
