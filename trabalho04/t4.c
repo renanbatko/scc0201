@@ -58,6 +58,8 @@ void fill_table(char *table) {
 	k++;
 }
 
+//calcula o valor de k, que eh a raiz quadrada do 
+// numero de caracteres do arquivo
 int k_value(FILE *fp) {
 	int k = 0;
 	while (fgetc(fp) != EOF) {
@@ -66,8 +68,47 @@ int k_value(FILE *fp) {
 	return sqrt(k);
 }
 
+//calcula a matriz inversa
+void calculate_inverse_matrix(int **m, int **mi, int k) {
+	int **id, i;
+	//aloca e preenche a matriz identidade de dimensao k
+	id = (int **) malloc(k * sizeof(int *));
+	for (i = 0; i < k; i++) {
+		id[i] = (int *) malloc(k * sizeof(int));
+	}
+	int j;
+	for (i = 0; i < k; i++) {
+		for (j = 0; j < k; j++) {
+			if (i == j){
+				id[i][j] = 1;
+			}
+			else {
+				id[i][j] = 0;
+			}
+		}
+	}
+	
+	//for (i = 0; i < k; i++) {
+	//	for (j = 0; j < k; j++) {
+	//		printf("%d ", id[i][j]);
+	//	}
+	//	printf("\n");
+	//}
+	
+	//aloca memoria para o resultado de m x id
+	mi = (int **) realloc(mi, k * sizeof(int *));
+	for (i = 0; i < k; i++) {
+		mi[i] = (int *) malloc(k * sizeof(int));
+	}
+	
+	
+	
+	free(id);
+}
+
 int main(int argc, char *argv[]) {
 	FILE *fp;
+	int i;
 	char *filename;
 	
 	//le o nome do arquivo e abre-o
@@ -86,9 +127,37 @@ int main(int argc, char *argv[]) {
 	//	printf("%c ", table[i]);
 	//}
 	
-	//printf("k = %d\n", k_value(fp));
+	//atribui a k o valor calculado para o mesmo
+	int k = k_value(fp);
+	
+	//aloca a matriz de dimensao k
+	int **m;
+	m = (int **) malloc(k * sizeof(int *));
+	for (i = 0; i < k; i++) {
+		m[i] = (int *) malloc(k * sizeof(int));
+	}
+	
+	//le os valores da matriz m
+	int j;
+	for (i = 0; i < k; i++) {
+		for (j = 0; j < k; j++) {
+			scanf(" %d", &m[i][j]);
+		}
+	}
+	
+	//for (i = 0; i < k; i++) {
+	//	for (j = 0; j < k; j++) {
+	//		printf("%d ", m[i][j]);
+	//	}
+	//	printf("\n");
+	//}
+	
+	int **mi = NULL;
+	calculate_inverse_matrix(m, mi, k);
 	
 	free(filename);
+	free(m);
+	free(table);
 	fclose(fp);
 	
 	return 0;
