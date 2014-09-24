@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 //funcao para ler do teclado
 char *readline(FILE *stream) {
@@ -68,53 +69,37 @@ int k_value(FILE *fp) {
 	return sqrt(k);
 }
 
-//calcula a matriz inversa
-void calculate_inverse_matrix(int **m, int **mi, int k) {
-	int **id, i;
-	//aloca e preenche a matriz identidade de dimensao k
-	id = (int **) malloc(k * sizeof(int *));
-	for (i = 0; i < k; i++) {
-		id[i] = (int *) malloc(k * sizeof(int));
-	}
-	int j;
-	for (i = 0; i < k; i++) {
-		for (j = 0; j < k; j++) {
-			if (i == j){
-				id[i][j] = 1;
-			}
-			else {
-				id[i][j] = 0;
-			}
+//pesquisa o indice em table de um caracter ch
+float seek_index(char ch, char *table){
+	int i;
+	for (i = 0; i <= strlen(table); i++) {
+		//printf("%c == %c ?\n", ch, table[i]);
+		if (ch == table[i]) {
+			return (i * 1.0);
 		}
 	}
+	return -1;
+}
+
+//calcula a matriz inversa
+void calculate_inverse_matrix(float **m, int size) {
 	
-	//for (i = 0; i < k; i++) {
-	//	for (j = 0; j < k; j++) {
-	//		printf("%d ", id[i][j]);
-	//	}
-	//	printf("\n");
-	//}
-	
-	//aloca memoria para o resultado de m x id
-	mi = (int **) realloc(mi, k * sizeof(int *));
-	for (i = 0; i < k; i++) {
-		mi[i] = (int *) malloc(k * sizeof(int));
-	}
-	
-	
-	
-	free(id);
 }
 
 int main(int argc, char *argv[]) {
 	FILE *fp;
-	int i;
+	int i, j;
 	char *filename;
 	
 	//le o nome do arquivo e abre-o
 	filename = readline(stdin);
 	fp = fopen(filename, "r+");
 	if (fp == NULL) exit(1);
+	
+	char c;
+	while ((c = fgetc(fp)) != EOF) {
+		printf("%c", c);
+	}
 	
 	//aloca e preenche o vetor com os caracteres
 	char *table;
@@ -128,20 +113,37 @@ int main(int argc, char *argv[]) {
 	//}
 	
 	//atribui a k o valor calculado para o mesmo
+	fseek(fp, 0, SEEK_SET);
 	int k = k_value(fp);
-	
-	//aloca a matriz de dimensao k
-	int **m;
-	m = (int **) malloc(k * sizeof(int *));
+
+	//y = mensagem criptografada (a que esta no arquivo)
+	float **y;
+	y = (float **) malloc(k * sizeof(float *));
 	for (i = 0; i < k; i++) {
-		m[i] = (int *) malloc(k * sizeof(int));
+		y[i] = (float *) malloc(k * sizeof(float));
+	}
+	
+	char ch;
+	fseek(fp, 0, SEEK_SET);
+	for (i = 0; i < k; i++) {
+		for (j = 0; j < k; j++) {
+			ch = fgetc(fp);
+			y[i][j] = seek_index(ch, table);
+			printf("%f\n", y[i][j]);
+		}
+	}
+	
+	//aloca a matriz m de dimensao k
+	float **m;
+	m = (float **) malloc(k * sizeof(float *));
+	for (i = 0; i < k; i++) {
+		m[i] = (float *) malloc(k * sizeof(float));
 	}
 	
 	//le os valores da matriz m
-	int j;
 	for (i = 0; i < k; i++) {
 		for (j = 0; j < k; j++) {
-			scanf(" %d", &m[i][j]);
+			scanf(" %f", &m[i][j]);
 		}
 	}
 	
@@ -152,8 +154,7 @@ int main(int argc, char *argv[]) {
 	//	printf("\n");
 	//}
 	
-	int **mi = NULL;
-	calculate_inverse_matrix(m, mi, k);
+	calculate_inverse_matrix(m, k);
 	
 	free(filename);
 	free(m);
