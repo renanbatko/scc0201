@@ -83,7 +83,37 @@ float seek_index(char ch, char *table){
 
 //calcula a matriz inversa
 void calculate_inverse_matrix(float **m, int size) {
+	int i, j, k;
 	
+	float ratio, a;
+	for (i = 0; i < size; i++) {
+		for (j = size; j < 2*size; j++) {
+			if (i == (j - size)) {
+				m[i][j] = 1.0;
+			}
+			else {
+				m[i][j] = 0.0;
+			}
+		}
+	}
+	
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			if (i != j) {
+				ratio = m[j][i]/m[i][i];
+				for (k = 0; k < 2*size; k++) {
+					m[j][k] -= ratio * m[i][k];
+				}
+			}
+		}
+	}
+	
+	for (i = 0; i < size; i++) {
+		a = m[i][i];
+		for (j = 0; j < 2*size; j++) {
+			m[i][j] /= a;
+		}
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -129,7 +159,7 @@ int main(int argc, char *argv[]) {
 		for (j = 0; j < k; j++) {
 			ch = fgetc(fp);
 			y[i][j] = seek_index(ch, table);
-			printf("%f\n", y[i][j]);
+			//printf("%f\n", y[i][j]);
 		}
 	}
 	
@@ -155,6 +185,13 @@ int main(int argc, char *argv[]) {
 	//}
 	
 	calculate_inverse_matrix(m, k);
+	
+	for (i = 0; i < k; i++) {
+		for (j = k; j < 2*k; j++) {
+			printf("%.2f ", m[i][j]);
+		}
+		printf("\n");
+	}
 	
 	free(filename);
 	free(m);
