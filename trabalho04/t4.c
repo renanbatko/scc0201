@@ -126,6 +126,21 @@ void calculate_inverse_matrix(float **m, int size) {
 	}
 }
 
+//multiplica a matriz m pela y e armazena o resultado na matriz x
+void matrix_multiplication(float **x, float **m, float **y, int size) {
+	int li, col, i;
+	float s;
+	for (li = 0; li < size; li++) {
+		for (col = 0; col < size; col++) {
+			s = 0.0;
+			for (i = 0; i < size; i++) {
+				s = s + (m[li][i] * y[i][col]);
+			}
+			x[li][col] = s;
+		}
+	}
+}
+
 int main(int argc, char *argv[]) {
 	FILE *fp;
 	int i, j;
@@ -175,9 +190,9 @@ int main(int argc, char *argv[]) {
 	
 	//aloca a matriz m de dimensao k
 	float **m;
-	m = (float **) malloc(2 * k * sizeof(float *));
+	m = (float **) malloc(k * sizeof(float *));
 	for (i = 0; i < k; i++) {
-		m[i] = (float *) malloc(2 * k * sizeof(float));
+		m[i] = (float *) malloc(k * sizeof(float));
 	}
 	
 	//aloca a matriz mi de dimensao k
@@ -210,8 +225,27 @@ int main(int argc, char *argv[]) {
 		printf("\n");
 	}
 	
+	//aloca a matriz resposta x de dimensao k
+	float **x;
+	x = (float **) malloc(k * sizeof(float *));
+	for (i = 0; i < k; i++) {
+		x[i] = (float *) malloc(k * sizeof(float));
+	}
+	
+	matrix_multiplication(x, m, y, k);
+	
+	printf("\n");
+	for (i = 0; i < k; i++) {
+		for (j = 0; j < k; j++) {
+			printf("%.2f ", x[i][j]);
+		}
+		printf("\n");
+	}
+	
 	free(filename);
 	free(m);
+	free(y);
+	free(x);
 	free(table);
 	fclose(fp);
 	
