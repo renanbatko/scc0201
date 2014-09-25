@@ -114,6 +114,16 @@ void calculate_inverse_matrix(float **m, int size) {
 			m[i][j] /= a;
 		}
 	}
+	
+	int ii = 0, jj = 0;
+	for (i = 0; i < size; i++) {
+		for (j = size; j < 2*size; j++) {
+			m[ii][jj] = m[i][j];
+			jj++;
+		}
+		jj = 0;
+		ii++;
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -165,10 +175,17 @@ int main(int argc, char *argv[]) {
 	
 	//aloca a matriz m de dimensao k
 	float **m;
-	m = (float **) malloc(k * sizeof(float *));
+	m = (float **) malloc(2 * k * sizeof(float *));
 	for (i = 0; i < k; i++) {
-		m[i] = (float *) malloc(k * sizeof(float));
+		m[i] = (float *) malloc(2 * k * sizeof(float));
 	}
+	
+	//aloca a matriz mi de dimensao k
+	//float **mi;
+	//mi = (float **) malloc(k * sizeof(float *));
+	//for (i = 0; i < k; i++) {
+	//	mi[i] = (float *) malloc(k * sizeof(float));
+	//}
 	
 	//le os valores da matriz m
 	for (i = 0; i < k; i++) {
@@ -187,7 +204,7 @@ int main(int argc, char *argv[]) {
 	calculate_inverse_matrix(m, k);
 	
 	for (i = 0; i < k; i++) {
-		for (j = k; j < 2*k; j++) {
+		for (j = 0; j < k; j++) {
 			printf("%.2f ", m[i][j]);
 		}
 		printf("\n");
