@@ -141,6 +141,10 @@ void matrix_multiplication(float **x, float **m, float **y, int size) {
 	}
 }
 
+char seek_char(int index, char *table) {
+	return table[index];
+}
+
 int main(int argc, char *argv[]) {
 	FILE *fp;
 	int i, j;
@@ -240,6 +244,13 @@ int main(int argc, char *argv[]) {
 			printf("%.2f ", x[i][j]);
 		}
 		printf("\n");
+	}
+	
+	printf("\n");
+	for (i = 0; i < k; i++) {
+		for (j = 0; j < k; j++) {
+			printf("%c", seek_char(x[i][j], table));
+		}
 	}
 	
 	free(filename);
