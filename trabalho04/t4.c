@@ -170,9 +170,8 @@ int main(int argc, char *argv[]) {
 	fill_table(table);
 	
 	//imprime o vetor de caracteres, apenas para testes
-	//int i;
 	//for (i = 0; i <= 91; i++) {
-	//	printf("%c ", table[i]);
+	//	printf("%c - [%d]\n", table[i], i);
 	//}
 	
 	//atribui a k o valor calculado para o mesmo
@@ -253,7 +252,7 @@ int main(int argc, char *argv[]) {
 	//printf("\n");
 	for (i = 0; i < k; i++) {
 		for (j = 0; j < k; j++) {
-			printf("%c", seek_char((int)x[i][j], table));
+			printf("%c", seek_char((int)x[j][i], table));
 		}
 	}
 	
