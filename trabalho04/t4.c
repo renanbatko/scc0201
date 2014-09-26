@@ -4,7 +4,7 @@
 #include <string.h>
 
 //funcao para ler do teclado
-char *readline(FILE *stream) {
+/*char *readline(FILE *stream) {
 	char *buffer = NULL;
 	char character;
 	int counter = 0;
@@ -17,7 +17,7 @@ char *readline(FILE *stream) {
 	buffer[counter-1] = '\0';
 	
 	return buffer;
-}
+}*/
 
 //funcao para preencher o vetor de caracteres
 void fill_table(char *table) {
@@ -142,23 +142,27 @@ void matrix_multiplication(float **x, float **m, float **y, int size) {
 }
 
 char seek_char(int index, char *table) {
-	return table[index];
+	if (index >= 0 && index <= 91)
+		return table[index];
+	return '-';
 }
 
 int main(int argc, char *argv[]) {
 	FILE *fp;
 	int i, j;
 	char *filename;
+	filename = (char *) malloc(20 * sizeof(char));
 	
 	//le o nome do arquivo e abre-o
-	filename = readline(stdin);
+	scanf(" %s", filename);
+	//filename = readline(stdin);
 	fp = fopen(filename, "r+");
 	if (fp == NULL) exit(1);
 	
-	char c;
-	while ((c = fgetc(fp)) != EOF) {
-		printf("%c", c);
-	}
+	//char c;
+	//while ((c = fgetc(fp)) != EOF) {
+	//	printf("%c", c);
+	//}
 	
 	//aloca e preenche o vetor com os caracteres
 	char *table;
@@ -187,8 +191,8 @@ int main(int argc, char *argv[]) {
 	for (i = 0; i < k; i++) {
 		for (j = 0; j < k; j++) {
 			ch = fgetc(fp);
-			y[i][j] = seek_index(ch, table);
-			//printf("%f\n", y[i][j]);
+			y[j][i] = seek_index(ch, table);
+			//printf("%f\n", y[j][i]);
 		}
 	}
 	
@@ -222,12 +226,12 @@ int main(int argc, char *argv[]) {
 	
 	calculate_inverse_matrix(m, k);
 	
-	for (i = 0; i < k; i++) {
-		for (j = 0; j < k; j++) {
-			printf("%.2f ", m[i][j]);
-		}
-		printf("\n");
-	}
+	//for (i = 0; i < k; i++) {
+	//	for (j = 0; j < k; j++) {
+	//		printf("%.2f ", m[i][j]);
+	//	}
+	//	printf("\n");
+	//}
 	
 	//aloca a matriz resposta x de dimensao k
 	float **x;
@@ -238,18 +242,18 @@ int main(int argc, char *argv[]) {
 	
 	matrix_multiplication(x, m, y, k);
 	
-	printf("\n");
-	for (i = 0; i < k; i++) {
-		for (j = 0; j < k; j++) {
-			printf("%.2f ", x[i][j]);
-		}
-		printf("\n");
-	}
+	//printf("\n");
+	//for (i = 0; i < k; i++) {
+	//	for (j = 0; j < k; j++) {
+	//		printf("%.2f ", x[i][j]);
+	//	}
+	//	printf("\n");
+	//}
 	
-	printf("\n");
+	//printf("\n");
 	for (i = 0; i < k; i++) {
 		for (j = 0; j < k; j++) {
-			printf("%c", seek_char(x[i][j], table));
+			printf("%c", seek_char((int)x[i][j], table));
 		}
 	}
 	
