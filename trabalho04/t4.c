@@ -144,7 +144,7 @@ void matrix_multiplication(float **x, float **m, float **y, int size) {
 char seek_char(int index, char *table) {
 	if (index >= 0 && index <= 91)
 		return table[index];
-	return '-';
+	return 0;
 }
 
 int main(int argc, char *argv[]) {
