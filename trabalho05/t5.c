@@ -58,10 +58,23 @@ void calculate_new_groups(int *byte_index, unsigned char *bytes, int size, float
 		
 	}
 	
-	//for (i = 0; i < n_groups; i++) {
-	//	printf("%.2f/%.1f = %.2f\n", aux[i].sum, aux[i].n, aux[i].sum/aux[i].n);
-	//}
+	for (i = 0; i < n_groups; i++) {
+		new_groups[i] = aux[i].sum/aux[i].n;
+		//printf("%.2f/%.1f = %.2f\n", aux[i].sum, aux[i].n, aux[i].sum/aux[i].n);
+	}
 	free(aux);
+}
+
+void fill_new_bytes(float *new_bytes, int *byte_index, int size, float *new_groups) {
+	int i;
+	//for (i = 0; i < 3; i++) {
+	//	printf("%.2f ", new_groups[i]);
+	//}
+	
+	for (i = 0; i < size; i++) {
+		new_bytes[i] = new_groups[byte_index[i]];
+		printf("%.2f ", new_bytes[i]);
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -117,7 +130,7 @@ int main(int argc, char *argv[]) {
 		aux->n++;
 	}
 	average_dif = aux->sum/aux->n;
-	printf("average_dif: %.2f\n", average_dif);
+	//printf("average_dif: %.2f\n", average_dif);
 	
 	while (average_dif > T) {
 		for (i = 0; i < n_groups; i++) {
@@ -133,8 +146,13 @@ int main(int argc, char *argv[]) {
 			aux->n++;
 		}
 		average_dif = aux->sum/aux->n;
-		printf("average_dif: %.2f\n", average_dif);
+		//printf("average_dif: %.2f\n", average_dif);
 	}
+	
+	float *new_bytes;
+	new_bytes = (float *) malloc((counter + 1) * sizeof(float));
+	
+	fill_new_bytes(new_bytes, byte_index, counter + 1, new_groups);
 	
 	free(bytes);
 	free(vet_groups);
