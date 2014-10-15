@@ -58,9 +58,9 @@ void calculate_new_groups(int *byte_index, unsigned char *bytes, int size, float
 		
 	}
 	
-	for (i = 0; i < n_groups; i++) {
-		printf("%.2f/%.1f = %.2f\n", aux[i].sum, aux[i].n, aux[i].sum/aux[i].n);
-	}
+	//for (i = 0; i < n_groups; i++) {
+	//	printf("%.2f/%.1f = %.2f\n", aux[i].sum, aux[i].n, aux[i].sum/aux[i].n);
+	//}
 	free(aux);
 }
 
@@ -91,6 +91,8 @@ int main(int argc, char *argv[]) {
 	for (i = 0; i < n_groups; i++) {
 		scanf(" %f", &vet_groups[i]);
 	}
+	float T;
+	scanf(" %f", &T);
 	
 	int *byte_index;
 	byte_index = (int *) malloc((counter + 1) * sizeof(int));
@@ -106,10 +108,39 @@ int main(int argc, char *argv[]) {
 	new_groups = (float *) malloc((n_groups + 1) * sizeof(float));
 	calculate_new_groups(byte_index, bytes, counter + 1, new_groups, n_groups);
 	
+	float average_dif, dif;
+	struct b *aux;
+	aux = (struct b *) malloc(sizeof(struct b));
+	for (i = 0; i < n_groups; i++) {
+		dif = (vet_groups[i]-new_groups[i] > 0) ? (vet_groups[i]-new_groups[i]) : ((vet_groups[i]-new_groups[i])*-1);
+		aux->sum = aux->sum + dif;
+		aux->n++;
+	}
+	average_dif = aux->sum/aux->n;
+	printf("average_dif: %.2f\n", average_dif);
+	
+	while (average_dif > T) {
+		for (i = 0; i < n_groups; i++) {
+			vet_groups[i] = new_groups[i];
+		}
+		
+		calculate_group_index(vet_groups, n_groups, byte_index, bytes, counter + 1);
+		calculate_new_groups(byte_index, bytes, counter + 1, new_groups, n_groups);
+		
+		for (i = 0; i < n_groups; i++) {
+			dif = (vet_groups[i]-new_groups[i] > 0) ? (vet_groups[i]-new_groups[i]) : ((vet_groups[i]-new_groups[i])*-1);
+			aux->sum = aux->sum + dif;
+			aux->n++;
+		}
+		average_dif = aux->sum/aux->n;
+		printf("average_dif: %.2f\n", average_dif);
+	}
+	
 	free(bytes);
 	free(vet_groups);
 	free(byte_index);
 	free(new_groups);
+	free(aux);
 	fclose(audio);
 	
 	return 0;
