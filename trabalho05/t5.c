@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 struct a {
 	float value;
@@ -73,7 +74,15 @@ void fill_new_bytes(float *new_bytes, int *byte_index, int size, float *new_grou
 	
 	for (i = 0; i < size; i++) {
 		new_bytes[i] = new_groups[byte_index[i]];
-		printf("%.2f ", new_bytes[i]);
+		//printf("%.2f ", new_bytes[i]);
+	}
+}
+
+void truncate(float *new_bytes, int size) {
+	int i;
+	for (i = 0; i < size; i++) {
+		new_bytes[i] = floor(new_bytes[i]);
+		//printf("%.0f ", new_bytes[i]);
 	}
 }
 
@@ -154,12 +163,25 @@ int main(int argc, char *argv[]) {
 	
 	fill_new_bytes(new_bytes, byte_index, counter + 1, new_groups);
 	
+	truncate(new_bytes, counter + 1);
+	
+	FILE *fp;
+	fp = fopen("saida.raw", "w+");
+	if (fp == NULL) exit(1);
+	
+	for (i = 0; i < counter + 1; i++) {
+		fputc(new_bytes[i], stdout);
+		fputc(new_bytes[i], fp);
+	}
+	
 	free(bytes);
 	free(vet_groups);
 	free(byte_index);
 	free(new_groups);
 	free(aux);
+	free(new_bytes);
 	fclose(audio);
+	fclose(fp);
 	
 	return 0;
 }
