@@ -31,6 +31,39 @@ void calculate_group_index(float *vet_groups, int n_groups, int *byte_index, uns
 	}
 }
 
+struct b {
+	float sum;
+	float n;
+};
+
+void calculate_new_groups(int *byte_index, unsigned char *bytes, int size, float *new_groups, int n_groups) {
+	int i, j;
+	
+	struct b *aux;
+	aux = (struct b *) malloc((n_groups + 1) * sizeof(struct b));
+	
+	for (i = 0; i < n_groups; i++) {
+		aux[i].sum = 0;
+		aux[i].n = 0;
+	}
+	
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < n_groups; j++) {
+			if (byte_index[i] == j) {
+				aux[j].sum = aux[j].sum + bytes[i];
+				aux[j].n++;
+				break;
+			}
+		}
+		
+	}
+	
+	for (i = 0; i < n_groups; i++) {
+		printf("%.2f/%.1f = %.2f\n", aux[i].sum, aux[i].n, aux[i].sum/aux[i].n);
+	}
+	free(aux);
+}
+
 int main(int argc, char *argv[]) {
 	char audio_name[20];
 	scanf(" %s", audio_name);
@@ -64,14 +97,19 @@ int main(int argc, char *argv[]) {
 	
 	calculate_group_index(vet_groups, n_groups, byte_index, bytes, counter + 1);
 	
-	for (i = 0; i < counter+1; i++) {
-		printf("[%u %d] ", bytes[i], byte_index[i]);
-	}
-	printf("\n");
+	//for (i = 0; i < counter+1; i++) {
+	//	printf("[%u %d] ", bytes[i], byte_index[i]);
+	//}
+	//printf("\n");
+	
+	float *new_groups;
+	new_groups = (float *) malloc((n_groups + 1) * sizeof(float));
+	calculate_new_groups(byte_index, bytes, counter + 1, new_groups, n_groups);
 	
 	free(bytes);
 	free(vet_groups);
 	free(byte_index);
+	free(new_groups);
 	fclose(audio);
 	
 	return 0;
