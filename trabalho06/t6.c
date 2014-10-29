@@ -13,6 +13,19 @@ void dct2(unsigned char *bytes, float *new_bytes, int size) {
 	}
 }
 
+void insertion_sort(float *values, int size) {
+	int i, j; float temp;
+	for (j = 1; j < size; j++) {
+		temp = values[j];
+		i = j - 1;
+		while (i >= 0 && values[i] > temp) {
+			values[i+1] = values[i];
+			i--;
+		}
+		values[i+1] = temp;
+	}
+}
+
 int main(int argc, char *argv[]) {
 	char audio_name[20];
 	scanf(" %s", audio_name);
@@ -39,6 +52,17 @@ int main(int argc, char *argv[]) {
 	new_bytes = (float *) malloc((size + 1) * sizeof(float));
 	
 	dct2(bytes, new_bytes, size);
+	
+	int i;
+	//for (i = 0; i < size; i++) {
+	//	printf("%f\n", new_bytes[i]);
+	//}
+	
+	insertion_sort(new_bytes, size);
+	
+	for (i = size-1; i >= size-K; i--) {
+		printf("%.2f\n", new_bytes[i]);
+	}
 	
 	free(bytes);
 	free(new_bytes);
