@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define PI 3.14159265
 
 void dct2(unsigned char *bytes, float *new_bytes, int size) {
 	int i, k;
 	for (k = 0; k < size; k++) {
 		new_bytes[k] = 0;
 		for (i = 0; i < size; i++) {
-			new_bytes[i] += ((bytes[i] * 1.0) * cos((PI/size) * (i + 0.5) * k));
+			new_bytes[k] += ((bytes[i] * 1.0) * cos((M_PI/size) * (i + 0.5) * k));
 		}
 	}
 }
