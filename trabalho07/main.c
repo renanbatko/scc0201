@@ -1,20 +1,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#define ENTER 10
 
-int main(int argc, char *argv[]) {
+char *read_command() {
 	char *command = NULL;
 	char ch;
-	int counter = 1;
-	while (ch != '\n') {
+	int counter = 0;
+	do {
 		ch = fgetc(stdin);
-		command = (char *) realloc(command, counter * sizeof(char));
-		command[counter-1] = ch;
-		counter++;
-	}
+		command = (char *) realloc(command, (counter+1) * sizeof(char));
+		command[counter++] = ch;
+	} while (ch != ENTER);
 	command[counter-1] = '\0';
 	
-	//printf("comando: %s", command);
+	return command;
+}
+
+int main(int argc, char *argv[]) {
+	char *command = read_command();
+	
+	//printf("comando: %s\n", command);
 	
 	free(command);
 	return 0;
