@@ -30,29 +30,33 @@ int verify_command(char *full_command) {
 	}
 	command[counter] = '\0';
 	
-	//printf("COMANDO: %s\n", command);
+	if (!strcmp(command, "insert")) return 1;
+	if (!strcmp(command, "search")) return 2;
+	if (!strcmp(command, "index")) return 3;
+	if (!strcmp(command, "exit")) return 4;
 	
-	return 1;
+	
+	return -1;
 }
 
 int main(int argc, char *argv[]) {
 	char *command = read_command();
 	
-	verify_command(command);
-	/*switch (verify_command(command)) {
+	//verify_command(command);
+	switch (verify_command(command)) {
 		case 1:
-			//something something
+			printf("insert\n");
 		break;
 		case 2:
-			//something something
+			printf("search\n");
 		break;
 		case 3:
-			//something something
+			printf("index\n");
 		break;
 		case 4:
-			//something something
+			printf("exit\n");
 		break;
-	}*/
+	}
 	
 	free(command);
 	return 0;
