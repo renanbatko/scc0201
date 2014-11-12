@@ -3,6 +3,7 @@
 #include <string.h>
 #define ENTER 10
 
+//funcao para ler um comando
 char *read_command() {
 	char *command = NULL;
 	char ch;
@@ -17,6 +18,8 @@ char *read_command() {
 	return command;
 }
 
+//funcao que recebe uma linha inteira e retorna qual comando
+// que estah presente nela.
 int verify_command(char *full_command) {
 	char *command = NULL;
 	int counter = 0, i = 0;
@@ -39,10 +42,15 @@ int verify_command(char *full_command) {
 	return -1;
 }
 
+//funcao para ler uma linha. 
+// como a funcao read_command jah faz isso,
+// a read_line apenas chama a read_command.
 char *read_line() {
 	return read_command();
 }
 
+//funcao que interpreta as informacoes do
+// arquivo de metadados e cria o arquivo .reg
 void create_reg_file(FILE *metadata, FILE *file_reg) {
 	char *name_reg_file = NULL;
 	char ch, ch2;
@@ -61,7 +69,9 @@ void create_reg_file(FILE *metadata, FILE *file_reg) {
 	}
 	name_reg_file[counter] = '\0';
 	
-	printf("filename: %s\n", name_reg_file);
+	file_reg = fopen(name_reg_file, "a");
+	if (file_reg == NULL) return;
+	
 	
 	free(name_reg_file);
 }
@@ -70,7 +80,7 @@ int insert(FILE *metadata, FILE *file_reg, char *command) {
 	return 0;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {	
 	char *command;
 	
 	char *filename;
@@ -80,14 +90,13 @@ int main(int argc, char *argv[]) {
 	fp = fopen(filename, "r");
 	if (fp == NULL) exit(1);
 	
-	FILE *file_reg;
+	FILE *file_reg = NULL;
 	
 	while (1) {
 		command = read_command();
 		switch (verify_command(command)) {
 			case 1:
 				create_reg_file(fp, file_reg);
-				
 				insert(fp, file_reg, command);
 			break;
 			case 2:
