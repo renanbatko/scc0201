@@ -43,18 +43,52 @@ char *read_line() {
 	return read_command();
 }
 
+void create_reg_file(FILE *metadata, FILE *file_reg) {
+	char *name_reg_file = NULL;
+	char ch, ch2;
+	rewind(metadata);
+	
+	int flag = 0, counter = 0;
+	while ((ch = fgetc(metadata)) != ENTER) {
+		if (ch == ' ') flag = 1;
+		if (ch2 == ' ') flag = 2;
+		ch2 = ch;
+		if (flag == 2) {
+			name_reg_file = (char *) realloc(name_reg_file, (counter+1) * sizeof(char));
+			name_reg_file[counter] = ch;
+			counter++;
+		}
+	}
+	name_reg_file[counter] = '\0';
+	
+	printf("filename: %s\n", name_reg_file);
+	
+	free(name_reg_file);
+}
+
+int insert(FILE *metadata, FILE *file_reg, char *command) {
+	return 0;
+}
+
 int main(int argc, char *argv[]) {
 	char *command;
 	
 	char *filename;
 	filename = read_line();
-	printf("FILENAME: %s\n", filename);
+	
+	FILE *fp;
+	fp = fopen(filename, "r");
+	if (fp == NULL) exit(1);
+	
+	FILE *file_reg;
 	
 	while (1) {
 		command = read_command();
 		switch (verify_command(command)) {
 			case 1:
-				printf("insert\n");
+				create_reg_file(fp, file_reg);
+				
+				insert(fp, file_reg, command);
 			break;
 			case 2:
 				printf("search\n");
@@ -63,6 +97,9 @@ int main(int argc, char *argv[]) {
 				printf("index\n");
 			break;
 			case 4:
+				fclose(fp);
+				free(command);
+				free(filename);
 				return 0;
 			break;
 		}
