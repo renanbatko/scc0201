@@ -39,8 +39,16 @@ int verify_command(char *full_command) {
 	return -1;
 }
 
+char *read_line() {
+	return read_command();
+}
+
 int main(int argc, char *argv[]) {
 	char *command;
+	
+	char *filename;
+	filename = read_line();
+	printf("FILENAME: %s\n", filename);
 	
 	while (1) {
 		command = read_command();
@@ -58,9 +66,10 @@ int main(int argc, char *argv[]) {
 				return 0;
 			break;
 		}
+		free(command);
 	}
 	
-	free(command);
+	free(filename);
 	return 0;
 }
 
