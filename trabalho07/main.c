@@ -77,6 +77,32 @@ void create_reg_file(FILE *metadata, FILE *file_reg) {
 }
 
 int insert(FILE *metadata, FILE *file_reg, char *command) {
+	/*int 1
+	  float 2
+	  double 3
+	  char 4*/
+	char ch, ch2;
+	int counter = 0, nenter = 0, flag = 0;
+	char *info = NULL;
+	while ((ch = fgetc(metadata)) != EOF) {
+		if (ch == ENTER) {
+			nenter++;
+		}
+		if (nenter > 1 && nenter % 2 != 0) {
+			if (ch == ' ') flag = 1;
+			if (ch2 == ' ') flag = 2;
+			ch2 = ch;
+			if (flag == 2) {
+				info = (char *) realloc(info, (counter+1) * sizeof(char));
+				info[counter] = ch;
+				counter++;
+			}
+		}
+	}
+	info[counter] = '\0';
+	
+	printf("INFO: %s\n", info);
+	
 	return 0;
 }
 
