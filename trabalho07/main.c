@@ -40,22 +40,24 @@ int verify_command(char *full_command) {
 }
 
 int main(int argc, char *argv[]) {
-	char *command = read_command();
+	char *command;
 	
-	//verify_command(command);
-	switch (verify_command(command)) {
-		case 1:
-			printf("insert\n");
-		break;
-		case 2:
-			printf("search\n");
-		break;
-		case 3:
-			printf("index\n");
-		break;
-		case 4:
-			printf("exit\n");
-		break;
+	while (1) {
+		command = read_command();
+		switch (verify_command(command)) {
+			case 1:
+				printf("insert\n");
+			break;
+			case 2:
+				printf("search\n");
+			break;
+			case 3:
+				printf("index\n");
+			break;
+			case 4:
+				return 0;
+			break;
+		}
 	}
 	
 	free(command);
