@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #define ENTER 10
 
 //funcao para ler um comando
@@ -69,6 +70,8 @@ void create_reg_file(FILE *metadata, FILE *file_reg) {
 	}
 	name_reg_file[counter] = '\0';
 	
+	//printf("NAMEREGFILE: %s\n", name_reg_file);
+	
 	file_reg = fopen(name_reg_file, "a");
 	if (file_reg == NULL) return;
 	
@@ -76,11 +79,34 @@ void create_reg_file(FILE *metadata, FILE *file_reg) {
 	free(name_reg_file);
 }
 
+enum {
+	INT,
+	FLOAT,
+	DOUBLE,
+	STRING
+};
+
+typedef struct datatipo {
+	int tipo;
+	int tamanho;
+} DATA_TYPE;
+
 int insert(FILE *metadata, FILE *file_reg, char *command) {
-	/*int 1
-	float 2
-	double 3
-	char 4*/
+	char a[12], b[5];
+	int nenter = 1;
+	
+	while (!feof(metadata)) {
+		fscanf(metadata, "%s %s", a, b);
+		nenter++;
+		if ((nenter % 2) != 0 && nenter >=3)
+			printf("DATA_TYPE: %s\n", b);
+	}
+	
+	return 0;
+}
+
+
+/*int insert(FILE *metadata, FILE *file_reg, char *command) {
 	char ch, ch2;
 	int counter = 0, nenter = 0, flag = 0, ncommand = 0;
 	char *info = NULL;
@@ -94,35 +120,41 @@ int insert(FILE *metadata, FILE *file_reg, char *command) {
 		}
 	}
 	
-	//printf("NCOMMAND: %d\n", ncommand);
+	printf("NCOMMAND: %d\n", ncommand);
 	
-	nenter = 0;
+
+	nenter = 1;
 	rewind(metadata);
-	while ((ch = fgetc(metadata)) != EOF) {
-		if (ch == ENTER) {
-			nenter++;
-		}
-		if (nenter > 1 && nenter % 2 != 0) {
-			if (ch == ' ') flag = 1;
-			if (ch2 == ' ') flag = 2;
-			ch2 = ch;
-			if (flag == 2) {
-				info = (char *) realloc(info, (counter+1) * sizeof(char));
-				if (ch == ENTER) break;
-				info[counter] = ch;
-				counter++;
+	while (nenter <= pow(ncommand, 2)) {
+	printf("nenter(%d) <= ncommand^2(%d) ?\n", nenter, (int) pow(ncommand, 2));
+		while ((ch = fgetc(metadata)) != EOF) {
+			if (ch == ENTER) {
+				nenter++;
+				printf("nenter++\n");
 			}
-			//printf("%s\n", info);
+			if (nenter >= 3 && (nenter % 2 != 0)) {
+				if (ch == ' ') flag = 1;
+				if (ch2 == ' ') flag = 2;
+				ch2 = ch;
+				if (flag == 2) {
+					info = (char *) realloc(info, (counter+1) * sizeof(char));
+					if (ch == ENTER) break;
+					info[counter] = ch;
+					counter++;
+				}
+				//printf("%s\n", info);
+			}
 		}
+		info[counter] = '\0';
+		counter = 0;
+		//flag = 0;
+		printf("INFO: %s\n", info);
+		free(info);
+		info = NULL;
 	}
-	info[counter] = '\0';
-	
-	
-	//printf("INFO: %s\n", info);
-	
-	free(info);
+	printf("saindo...\n");
 	return 0;
-}
+}*/
 
 int main(int argc, char *argv[]) {	
 	char *command;
